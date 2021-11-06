@@ -54,7 +54,7 @@
      <number>0</number>
     </property>
     <property name="columnCount">
-     <number>5</number>
+     <number>6</number>
     </property>
     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
      <bool>false</bool>
@@ -89,6 +89,11 @@
     <column>
      <property name="text">
       <string>Charge</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>RESET</string>
      </property>
     </column>
     <column>

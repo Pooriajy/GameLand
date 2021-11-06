@@ -56,31 +56,36 @@ class Ui(QtWidgets.QMainWindow):
     def activateclock(self):
         row = self.gtable.currentRow()
         col = self.gtable.currentColumn()
-        if(col == 4):
-            item = self.gtable.item(row,0).text()
-            isitrunning = self.cur.execute("select runstatus from games where name='{0}'".format(item)).fetchone()[0]
+        item = self.gtable.item(row, 0).text()
+        isitrunning = self.cur.execute("select runstatus from games where name='{0}'".format(item)).fetchone()[0]
+        if(col == 5):
             if(isitrunning == 0):
-                self.cur.execute("update games set runstatus=1,time=0 where name='{0}'".format(item))
+                self.cur.execute("update games set runstatus=1 where name='{0}'".format(item))
                 self.conn.commit()
-                self.gtable.item(row,4).setText("Running!")
-                self.gtable.item(row,4).setBackground(QtGui.QColor(255,100,0))
+                self.gtable.item(row,5).setText("Running!")
+                self.gtable.item(row,5).setBackground(QtGui.QColor(255,100,0))
             else:
                 self.cur.execute("update games set runstatus=0 where name='{0}'".format(item))
                 self.conn.commit()
-                self.gtable.item(row,4).setText("Ready to Start!")
-                self.gtable.item(row,4).setBackground(QtGui.QColor(0,255,0))
+                self.gtable.item(row,5).setText("Ready to Start!")
+                self.gtable.item(row,5).setBackground(QtGui.QColor(0,255,0))
+        elif(col == 4):
+            self.cur.execute("update games set time=0 where name='{0}'".format(item))
+            self.conn.commit()
+            if(isitrunning == 0):
+                self.gtable.item(row,2).setText("00:00:00")
     def setcol(self):
         row = self.gtable.currentRow()
         col = self.gtable.currentColumn()
-        if (col == 4):
+        if (col == 5):
             item = self.gtable.item(row, 0).text()
             isitrunning = self.cur.execute("select runstatus from games where name='{0}'".format(item)).fetchone()[0]
             if (isitrunning == 0):
-                self.gtable.item(row, 4).setText("Running!")
-                self.gtable.item(row, 4).setBackground(QtGui.QColor(255, 100, 0))
+                self.gtable.item(row, 5).setText("Running!")
+                self.gtable.item(row, 5).setBackground(QtGui.QColor(255, 100, 0))
             else:
-                self.gtable.item(row, 4).setText("Ready to Start!")
-                self.gtable.item(row, 4).setBackground(QtGui.QColor(0, 150, 0))
+                self.gtable.item(row, 5).setText("Ready to Start!")
+                self.gtable.item(row, 5).setBackground(QtGui.QColor(0, 150, 0))
     def createNew(self):
         try:
             name = self.gname.text()
@@ -99,8 +104,9 @@ class Ui(QtWidgets.QMainWindow):
         for i in range(count[0]):
             self.gtable.setItem(i,0,QTableWidgetItem(data[i][0]))
             self.gtable.setItem(i,1,QTableWidgetItem(str(data[i][1])))
-            self.gtable.setItem(i,4,QTableWidgetItem("Ready to Start!"))
-            self.gtable.item(i,4).setBackground(QtGui.QColor(0,150,0))
+            self.gtable.setItem(i,4,QTableWidgetItem("Press To Reset!"))
+            self.gtable.setItem(i,5,QTableWidgetItem("Ready to Start!"))
+            self.gtable.item(i,5).setBackground(QtGui.QColor(0,150,0))
             self.setcol()
             self.gtable.setItem(i,2,QTableWidgetItem(str(data[i][2])))
             self.gtable.setItem(i,3,QTableWidgetItem("0"))
